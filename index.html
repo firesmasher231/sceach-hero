@@ -45,6 +45,11 @@
 			};
 		</script>
 		<style>
+			/* Smooth scrolling for the entire page */
+			html {
+				scroll-behavior: smooth;
+			}
+			
 			body {
 				cursor: none;
 			}
@@ -133,6 +138,18 @@
 				opacity: 0.1;
 				z-index: 0;
 			}
+
+            .cta-bg::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url("public/background.png") center/cover no-repeat;
+                opacity: 0.1;
+                z-index: 0;
+            }
 
 			/* Hedge Clipping Particles */
 			.particle {
@@ -255,7 +272,108 @@
 			.group:hover::before {
 				left: 100%;
 			}
-		</style>
+
+			/* Background Decorative Elements */
+			.bg-decoration {
+				position: absolute;
+				opacity: 0.04;
+				pointer-events: none;
+				z-index: 0;
+			}
+
+			.green-block {
+				background: linear-gradient(135deg, #7cb342, #4a7c59);
+				border-radius: 12px;
+				animation: float-slow 8s ease-in-out infinite;
+			}
+
+			.green-circle {
+				background: radial-gradient(circle, rgba(124, 179, 66, 0.25), rgba(74, 124, 89, 0.12));
+				border-radius: 50%;
+				animation: pulse-soft 6s ease-in-out infinite;
+			}
+
+			.green-triangle {
+				width: 0;
+				height: 0;
+				border-left: 30px solid transparent;
+				border-right: 30px solid transparent;
+				border-bottom: 52px solid rgba(124, 179, 66, 0.15);
+				animation: rotate-slow 15s linear infinite;
+			}
+
+			.leaf-shape {
+				background: rgba(124, 179, 66, 0.12);
+				border-radius: 0 100% 0 100%;
+				animation: sway 10s ease-in-out infinite;
+			}
+
+			.green-stripes {
+				background: repeating-linear-gradient(
+					45deg,
+					rgba(124, 179, 66, 0.06),
+					rgba(124, 179, 66, 0.06) 8px,
+					transparent 8px,
+					transparent 16px
+				);
+				animation: slide 12s linear infinite;
+			}
+
+			.green-dots {
+				background: radial-gradient(
+					circle at 20% 20%, rgba(124, 179, 66, 0.08) 2px, transparent 2px
+				),
+				radial-gradient(
+					circle at 80% 80%, rgba(74, 124, 89, 0.06) 1.5px, transparent 1.5px
+				);
+				background-size: 20px 20px, 15px 15px;
+				animation: float-slow 9s ease-in-out infinite;
+			}
+
+			.green-zigzag {
+				background: linear-gradient(
+					90deg,
+					transparent 40%,
+					rgba(124, 179, 66, 0.08) 40%,
+					rgba(124, 179, 66, 0.08) 60%,
+					transparent 60%
+				);
+				clip-path: polygon(0 0, 100% 20%, 100% 80%, 0 100%);
+				animation: sway 8s ease-in-out infinite;
+			}
+
+			@keyframes float-slow {
+				0%, 100% { transform: translateY(0px) rotate(0deg); }
+				33% { transform: translateY(-15px) rotate(2deg); }
+				66% { transform: translateY(-8px) rotate(-1deg); }
+			}
+
+			@keyframes pulse-soft {
+				0%, 100% { transform: scale(1); opacity: 0.08; }
+				50% { transform: scale(1.1); opacity: 0.15; }
+			}
+
+			@keyframes rotate-slow {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
+
+			@keyframes sway {
+				0%, 100% { transform: rotate(0deg) scale(1); }
+				25% { transform: rotate(3deg) scale(1.05); }
+				75% { transform: rotate(-3deg) scale(0.95); }
+			}
+
+			@keyframes slide {
+				0% { background-position: 0 0; }
+				100% { background-position: 32px 32px; }
+			}
+
+			/* Section-specific decorations */
+			.section-decorated {
+				position: relative;
+				overflow: hidden;
+			}		</style>
 	</head>
 	<body class="font-inter leading-relaxed text-text-dark bg-bg-light">
 		<!-- Hero Section -->
@@ -272,7 +390,7 @@
 						</span>
 					</div>
 					<h1
-						class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight animate-pulse"
+						class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight "
 					>
 						Protecting Ireland's Hedgerows
 						<span class="gradient-text block">with AI</span>
@@ -306,7 +424,15 @@
 		</section>
 
 		<!-- Problem Section -->
-		<section class="py-24 bg-white" id="about">
+		<section class="py-24 bg-white section-decorated" id="about">
+			<!-- Background Decorations -->
+			<div class="bg-decoration green-block" style="width: 120px; height: 80px; top: 10%; left: 5%; animation-delay: 0s;"></div>
+			<div class="bg-decoration green-circle" style="width: 180px; height: 180px; top: 15%; right: 8%; animation-delay: 1s;"></div>
+			<div class="bg-decoration leaf-shape" style="width: 60px; height: 60px; top: 70%; left: 12%; animation-delay: 2s;"></div>
+			<div class="bg-decoration green-triangle" style="top: 25%; right: 15%; animation-delay: 3s;"></div>
+			<div class="bg-decoration green-stripes" style="width: 200px; height: 100px; top: 50%; right: 5%; animation-delay: 1.5s;"></div>
+			<div class="bg-decoration green-dots" style="width: 150px; height: 150px; top: 5%; left: 25%; animation-delay: 4s;"></div>
+			<div class="bg-decoration green-zigzag" style="width: 120px; height: 60px; top: 80%; left: 20%; animation-delay: 2.5s;"></div>
 			<div class="container max-w-6xl mx-auto px-8">
 				<div class="text-center mb-16">
 					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary-green">
@@ -359,7 +485,16 @@
 		</section>
 
 		<!-- Solution Section -->
-		<section class="py-24 bg-bg-light">
+		<section class="py-24 bg-bg-light section-decorated">
+			<!-- Background Decorations -->
+			<div class="bg-decoration green-circle" style="width: 200px; height: 200px; top: 5%; left: 3%; animation-delay: 0.5s;"></div>
+			<div class="bg-decoration green-block" style="width: 90px; height: 140px; top: 60%; right: 5%; animation-delay: 1.5s;"></div>
+			<div class="bg-decoration leaf-shape" style="width: 80px; height: 80px; top: 35%; right: 20%; animation-delay: 2.5s;"></div>
+			<div class="bg-decoration green-triangle" style="top: 75%; left: 8%; animation-delay: 3.5s;"></div>
+			<div class="bg-decoration green-stripes" style="width: 180px; height: 120px; top: 15%; right: 10%; animation-delay: 1s;"></div>
+			<div class="bg-decoration green-dots" style="width: 160px; height: 100px; top: 50%; left: 15%; animation-delay: 4s;"></div>
+			<div class="bg-decoration green-zigzag" style="width: 140px; height: 80px; top: 80%; right: 25%; animation-delay: 2s;"></div>
+			<div class="bg-decoration green-stripes" style="width: 100px; height: 150px; top: 25%; left: 85%; animation-delay: 5s;"></div>
 			<div class="container max-w-6xl mx-auto px-8">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 					<div>
@@ -418,7 +553,7 @@
 
 					<!-- Live Demo Video -->
 					<div
-						class="bg-gradient-to-br from-white to-light-green p-6 rounded-2xl border-2 border-accent-green transition-all duration-300 hover:shadow-2xl hover:shadow-accent-green/30 hover:-translate-y-2 pulse-glow"
+						class="bg-gradient-to-br from-white to-light-green p-6 rounded-3xl border-2 border-accent-green transition-all duration-300 hover:shadow-2xl hover:shadow-accent-green/30 hover:-translate-y-2 pulse-glow"
 					>
 						<div class="mb-4 text-center">
 							<h3 class="font-bold text-primary-green text-xl mb-2">
@@ -518,7 +653,14 @@
 		</section>
 
 		<!-- Advanced Features Section -->
-		<section class="py-16 bg-gradient-to-br from-bg-light to-white">
+		<section class="py-16 bg-gradient-to-br from-bg-light to-white section-decorated">
+			<!-- Background Decorations -->
+			<div class="bg-decoration green-circle" style="width: 150px; height: 150px; top: 10%; right: 10%; animation-delay: 1s;"></div>
+			<div class="bg-decoration leaf-shape" style="width: 100px; height: 100px; top: 70%; left: 5%; animation-delay: 2s;"></div>
+			<div class="bg-decoration green-block" style="width: 110px; height: 60px; top: 30%; left: 15%; animation-delay: 3s;"></div>
+			<div class="bg-decoration green-stripes" style="width: 120px; height: 80px; top: 15%; left: 35%; animation-delay: 0.5s;"></div>
+			<div class="bg-decoration green-dots" style="width: 90px; height: 90px; top: 60%; right: 20%; animation-delay: 4s;"></div>
+			<div class="bg-decoration green-zigzag" style="width: 100px; height: 50px; top: 80%; right: 15%; animation-delay: 1.5s;"></div>
 			<div class="container max-w-4xl mx-auto px-8 text-center">
 				<h2 class="text-2xl md:text-3xl font-bold mb-6 text-primary-green">
 					🤖 Continuous Monitoring
@@ -529,7 +671,7 @@
 				</p>
 				<div class="max-w-2xl mx-auto">
 					<div
-						class="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-accent-green"
+						class="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-accent-green"
 					>
 						<video
 							class="w-full h-auto"
@@ -555,7 +697,17 @@
 		</section>
 
 		<!-- Impact Section -->
-		<section class="py-24 bg-white">
+		<section class="py-24 bg-white section-decorated">
+			<!-- Background Decorations -->
+			<div class="bg-decoration green-block" style="width: 160px; height: 100px; top: 8%; left: 8%; animation-delay: 0.5s;"></div>
+			<div class="bg-decoration green-circle" style="width: 220px; height: 220px; top: 12%; right: 5%; animation-delay: 1.5s;"></div>
+			<div class="bg-decoration leaf-shape" style="width: 90px; height: 90px; top: 65%; right: 12%; animation-delay: 2.5s;"></div>
+			<div class="bg-decoration green-triangle" style="top: 45%; left: 5%; animation-delay: 3.5s;"></div>
+			<div class="bg-decoration green-stripes" style="width: 200px; height: 120px; top: 25%; left: 20%; animation-delay: 1s;"></div>
+			<div class="bg-decoration green-dots" style="width: 180px; height: 100px; top: 70%; left: 15%; animation-delay: 4s;"></div>
+			<div class="bg-decoration green-zigzag" style="width: 150px; height: 80px; top: 10%; right: 25%; animation-delay: 2s;"></div>
+			<div class="bg-decoration green-stripes" style="width: 120px; height: 140px; top: 50%; right: 8%; animation-delay: 5s;"></div>
+			<div class="bg-decoration green-dots" style="width: 100px; height: 100px; top: 80%; right: 30%; animation-delay: 3s;"></div>
 			<div class="container max-w-6xl mx-auto px-8">
 				<div class="text-center">
 					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary-green">
@@ -604,9 +756,9 @@
 
 		<!-- CTA Section -->
 		<section
-			class="py-24 bg-gradient-to-br from-primary-green to-secondary-green text-white"
+			class="cta-bg relative py-24 bg-gradient-to-br from-primary-green to-secondary-green text-white overflow-hidden"
 		>
-			<div class="container max-w-6xl mx-auto px-8">
+			<div class="container relative z-10 max-w-6xl mx-auto px-8">
 				<div class="text-center">
 					<h2 class="text-3xl md:text-4xl font-bold mb-4">
 						Help Us Protect Ireland's Biodiversity
@@ -864,6 +1016,22 @@
 				testImg.src = "public/open.png";
 
 				new AdvancedCursor();
+				
+				// Enhanced smooth scrolling for anchor links
+				document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+					anchor.addEventListener('click', function (e) {
+						e.preventDefault();
+						const targetId = this.getAttribute('href');
+						const targetElement = document.querySelector(targetId);
+						
+						if (targetElement) {
+							targetElement.scrollIntoView({
+								behavior: 'smooth',
+								block: 'start'
+							});
+						}
+					});
+				});
 			});
 		</script>
 	</body>
