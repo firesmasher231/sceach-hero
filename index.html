@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sceach.eu - Protecting Ireland's Hedgerows</title>
+		<meta
+			name="description"
+			content="Automatic habitat endangerment detection system using AI to identify illegal hedge cutting and protect Ireland's biodiversity."
+		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							"primary-green": "#2d5016",
+							"secondary-green": "#4a7c59",
+							"accent-green": "#7cb342",
+							"light-green": "#c8e6c9",
+							"dark-green": "#1b3409",
+							"bg-light": "#fafcf7",
+							"text-dark": "#1a1a1a",
+							"text-gray": "#666666",
+							"text-light": "#888888",
+							"border-color": "#e8f0e4",
+						},
+						fontFamily: {
+							inter: [
+								"Inter",
+								"-apple-system",
+								"BlinkMacSystemFont",
+								"sans-serif",
+							],
+						},
+					},
+				},
+			};
+		</script>
+		<style>
+			body {
+				cursor: none;
+			}
+
+			/* Advanced Custom Cursor System */
+			.custom-cursor {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 32px;
+				height: 32px;
+				pointer-events: none;
+				z-index: 99999;
+				will-change: transform;
+				opacity: 0;
+				transition: opacity 0.2s ease;
+			}
+
+			.custom-cursor.visible {
+				opacity: 1;
+			}
+
+			/* Cursor States */
+			.custom-cursor.default {
+				background-image: url("public/open.png");
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				width: 32px;
+				height: 32px;
+				transform: translate(-50%, -50%) rotate(-30deg);
+			}
+
+			.custom-cursor.pointer {
+				background-image: url("public/open.png");
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				width: 36px;
+				height: 36px;
+				transform: translate(-50%, -50%) rotate(-30deg);
+			}
+
+			.custom-cursor.grabbing {
+				background-image: url("public/closed.png");
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				width: 34px;
+				height: 32px;
+				transform: translate(-50%, -50%) rotate(-30deg);
+			}
+
+			/* Hide default cursor globally */
+			* {
+				cursor: none !important;
+			}
+
+			/* Show default cursor on mobile/touch devices */
+			@media (pointer: coarse) {
+				* {
+					cursor: auto !important;
+				}
+				.custom-cursor {
+					display: none !important;
+				}
+			}
+
+			/* Gradient text effect */
+			.gradient-text {
+				background: linear-gradient(135deg, #4a7c59, #7cb342);
+				-webkit-background-clip: text;
+				background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+
+			/* Hero background */
+			.hero-bg::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: url("public/background.png") center/cover no-repeat;
+				opacity: 0.1;
+				z-index: 0;
+			}
+
+			/* Hedge Clipping Particles */
+			.particle {
+				position: fixed;
+				pointer-events: none;
+				z-index: 9999;
+				width: 4px;
+				height: 8px;
+				background: linear-gradient(to bottom, #7cb342, #4a7c59);
+				border-radius: 2px;
+				animation: hedgeClippingFall 500ms ease-out forwards;
+			}
+
+			.particle.dot {
+				width: 3px;
+				height: 3px;
+				border-radius: 50%;
+				background: #2d5016;
+			}
+
+			.particle.dash {
+				width: 2px;
+				height: 10px;
+				border-radius: 1px;
+				background: linear-gradient(to bottom, #4a7c59, #1b3409);
+			}
+
+			.particle.small-leaf {
+				width: 6px;
+				height: 4px;
+				border-radius: 3px 0;
+				background: #7cb342;
+			}
+
+			@keyframes hedgeClippingFall {
+				0% {
+					opacity: 1;
+					transform: translateY(0px) translateX(0px) rotate(0deg);
+				}
+				30% {
+					opacity: 0.8;
+					transform: translateY(15px) translateX(var(--random-x, 0px))
+						rotate(var(--random-rotate, 45deg));
+				}
+				100% {
+					opacity: 0;
+					transform: translateY(50px) translateX(var(--random-x-end, 0px))
+						rotate(var(--random-rotate-end, 180deg));
+				}
+			}
+
+			.particle:nth-child(odd) {
+				animation-timing-function: ease-in;
+			}
+
+			.particle:nth-child(even) {
+				animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+			}
+
+			/* Custom Animations */
+			@keyframes float {
+				0%,
+				100% {
+					transform: translateY(0px);
+				}
+				50% {
+					transform: translateY(-10px);
+				}
+			}
+
+			@keyframes shimmer {
+				0% {
+					transform: translateX(-100%);
+				}
+				100% {
+					transform: translateX(100%);
+				}
+			}
+
+			@keyframes pulse-glow {
+				0%,
+				100% {
+					box-shadow: 0 0 5px rgba(124, 179, 66, 0.3);
+				}
+				50% {
+					box-shadow: 0 0 20px rgba(124, 179, 66, 0.6),
+						0 0 30px rgba(124, 179, 66, 0.4);
+				}
+			}
+
+			.float-animation {
+				animation: float 3s ease-in-out infinite;
+			}
+
+			.float-animation:nth-child(2) {
+				animation-delay: 0.5s;
+			}
+
+			.float-animation:nth-child(3) {
+				animation-delay: 1s;
+			}
+
+			/* Shimmer effect for buttons */
+			.group::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(
+					90deg,
+					transparent,
+					rgba(255, 255, 255, 0.2),
+					transparent
+				);
+				transition: left 0.5s;
+			}
+
+			.group:hover::before {
+				left: 100%;
+			}
+		</style>
+	</head>
+	<body class="font-inter leading-relaxed text-text-dark bg-bg-light">
+		<!-- Hero Section -->
+		<section
+			class="hero-bg relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-bg-light to-light-green"
+		>
+			<div class="container relative z-10 max-w-6xl mx-auto px-8">
+				<div class="text-center max-w-4xl mx-auto">
+					<div class="inline-block mb-8">
+						<span
+							class="bg-gradient-to-r from-white to-bg-light text-primary-green py-2 px-6 rounded-full text-sm font-medium border-2 border-border-color transition-all duration-300 hover:scale-110 hover:shadow-lg hover:border-accent-green pulse-glow"
+						>
+							🌳 Live Project
+						</span>
+					</div>
+					<h1
+						class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight animate-pulse"
+					>
+						Protecting Ireland's Hedgerows
+						<span class="gradient-text block">with AI</span>
+					</h1>
+					<p class="text-lg md:text-xl text-text-gray mb-12 max-w-3xl mx-auto">
+						Sceach is an automatic habitat endangerment detection system that
+						uses instance segmentation on satellite imagery to identify illegal
+						hedge cutting, helping protect biodiversity and save thousands of
+						birds each year.
+					</p>
+					<div
+						class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+					>
+						<a
+							href="https://app.sceach.eu"
+							class="bg-gradient-to-r from-primary-green to-secondary-green text-white py-4 px-8 rounded-lg font-semibold transition-all duration-300 border-2 border-primary-green hover:from-dark-green hover:to-primary-green hover:shadow-2xl hover:shadow-primary-green/30 hover:-translate-y-2 hover:scale-105 w-full sm:w-auto max-w-xs relative overflow-hidden group"
+							target="_blank"
+							rel="noopener"
+						>
+							Go to App →
+						</a>
+						<a
+							href="#about"
+							class="bg-transparent text-primary-green py-4 px-8 rounded-lg font-semibold border-2 border-primary-green transition-all duration-300 hover:bg-gradient-to-r hover:from-primary-green hover:to-secondary-green hover:text-white hover:-translate-y-2 hover:scale-105 hover:shadow-xl w-full sm:w-auto max-w-xs relative overflow-hidden group"
+						>
+							Learn More
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Problem Section -->
+		<section class="py-24 bg-white" id="about">
+			<div class="container max-w-6xl mx-auto px-8">
+				<div class="text-center mb-16">
+					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary-green">
+						The Problem
+					</h2>
+					<p class="text-lg md:text-xl text-text-gray">
+						Ireland has over 689,000km of hedgerows - critical habitats for
+						wildlife
+					</p>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+					<div
+						class="bg-gradient-to-br from-bg-light to-white p-10 rounded-2xl text-center border-2 border-border-color transition-all duration-500 hover:-translate-y-3 hover:border-accent-green hover:shadow-2xl hover:shadow-accent-green/20 group float-animation"
+					>
+						<div
+							class="text-4xl md:text-5xl font-bold text-primary-green mb-2 group-hover:scale-110 transition-transform duration-300"
+						>
+							60%
+						</div>
+						<div class="text-text-gray font-medium">
+							of Irish birds are of serious conservation concern
+						</div>
+					</div>
+					<div
+						class="bg-gradient-to-br from-bg-light to-white p-10 rounded-2xl text-center border-2 border-border-color transition-all duration-500 hover:-translate-y-3 hover:border-accent-green hover:shadow-2xl hover:shadow-accent-green/20 group float-animation"
+					>
+						<div
+							class="text-4xl md:text-5xl font-bold text-primary-green mb-2 group-hover:scale-110 transition-transform duration-300"
+						>
+							&lt;10%
+						</div>
+						<div class="text-text-gray font-medium">
+							of infringements are reported
+						</div>
+					</div>
+					<div
+						class="bg-gradient-to-br from-bg-light to-white p-10 rounded-2xl text-center border-2 border-border-color transition-all duration-500 hover:-translate-y-3 hover:border-accent-green hover:shadow-2xl hover:shadow-accent-green/20 group float-animation"
+					>
+						<div
+							class="text-4xl md:text-5xl font-bold text-primary-green mb-2 group-hover:scale-110 transition-transform duration-300"
+						>
+							2-3 days
+						</div>
+						<div class="text-text-gray font-medium">
+							traditional investigation time
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Solution Section -->
+		<section class="py-24 bg-bg-light">
+			<div class="container max-w-6xl mx-auto px-8">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+					<div>
+						<h2 class="text-3xl md:text-4xl font-bold mb-6 text-primary-green">
+							Our Solution
+						</h2>
+						<p class="text-lg text-text-gray mb-8">
+							We revolutionize hedgerow protection by combining satellite
+							imagery with AI. Rangers can scan any area on-demand and receive
+							instant before/after comparisons, turning a 2-3 day investigation
+							into a 2-3 minute process.
+						</p>
+						<div class="space-y-4">
+							<div class="flex items-center gap-4">
+								<div
+									class="text-2xl w-12 h-12 bg-gradient-to-br from-white to-bg-light rounded-lg flex items-center justify-center border-2 border-border-color transition-all duration-300 hover:scale-110 hover:rotate-6 hover:shadow-lg hover:border-accent-green"
+								>
+									🛰️
+								</div>
+								<div class="font-medium text-text-dark">
+									Real-time satellite imagery analysis
+								</div>
+							</div>
+							<div class="flex items-center gap-4">
+								<div
+									class="text-2xl w-12 h-12 bg-gradient-to-br from-white to-bg-light rounded-lg flex items-center justify-center border-2 border-border-color transition-all duration-300 hover:scale-110 hover:rotate-6 hover:shadow-lg hover:border-accent-green"
+								>
+									🎯
+								</div>
+								<div class="font-medium text-text-dark">
+									Instance segmentation for precise detection
+								</div>
+							</div>
+							<div class="flex items-center gap-4">
+								<div
+									class="text-2xl w-12 h-12 bg-gradient-to-br from-white to-bg-light rounded-lg flex items-center justify-center border-2 border-border-color transition-all duration-300 hover:scale-110 hover:rotate-6 hover:shadow-lg hover:border-accent-green"
+								>
+									📊
+								</div>
+								<div class="font-medium text-text-dark">
+									Automated reporting system
+								</div>
+							</div>
+							<div class="flex items-center gap-4">
+								<div
+									class="text-2xl w-12 h-12 bg-gradient-to-br from-white to-bg-light rounded-lg flex items-center justify-center border-2 border-border-color transition-all duration-300 hover:scale-110 hover:rotate-6 hover:shadow-lg hover:border-accent-green"
+								>
+									👥
+								</div>
+								<div class="font-medium text-text-dark">
+									User-friendly dashboard
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Live Demo Video -->
+					<div
+						class="bg-gradient-to-br from-white to-light-green p-6 rounded-2xl border-2 border-accent-green transition-all duration-300 hover:shadow-2xl hover:shadow-accent-green/30 hover:-translate-y-2 pulse-glow"
+					>
+						<div class="mb-4 text-center">
+							<h3 class="font-bold text-primary-green text-xl mb-2">
+								🎬 See Sceach in Action
+							</h3>
+							<p class="text-sm text-text-gray">
+								Watch how our AI instantly detects hedge cutting violations
+							</p>
+						</div>
+						<div class="relative rounded-xl overflow-hidden shadow-xl">
+							<video
+								class="w-full h-auto"
+								autoplay
+								muted
+								loop
+								playsinline
+								poster="public/background.png"
+							>
+								<source src="public/scanondemand.mp4" type="video/mp4" />
+								Your browser does not support the video tag.
+							</video>
+							<div
+								class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full"
+							>
+								<p class="text-xs font-semibold text-primary-green">
+									✨ Live Demo
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Comparison Section -->
+				<div class="mt-20">
+					<h3 class="text-2xl font-bold text-center mb-12 text-primary-green">
+						Traditional vs AI-Powered Detection
+					</h3>
+					<div class="flex flex-col lg:flex-row items-center gap-8">
+						<div
+							class="bg-gradient-to-br from-white to-bg-light p-6 rounded-2xl border-2 border-border-color flex-1 w-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+						>
+							<div class="mb-4">
+								<div class="font-semibold text-primary-green">
+									Before Detection
+								</div>
+								<div class="text-sm text-text-light">Traditional Method</div>
+							</div>
+							<div class="space-y-2">
+								<div class="bg-bg-light py-2 px-4 rounded-lg text-sm">
+									📞 Public Reports
+								</div>
+								<div class="bg-bg-light py-2 px-4 rounded-lg text-sm">
+									🚗 Field Investigation
+								</div>
+								<div class="bg-bg-light py-2 px-4 rounded-lg text-sm">
+									📸 Manual Evidence
+								</div>
+								<div
+									class="text-center font-semibold text-secondary-green mt-4"
+								>
+									2-3 days
+								</div>
+							</div>
+						</div>
+						<div
+							class="text-3xl text-accent-green font-bold transform lg:rotate-0 rotate-90 transition-all duration-300 hover:scale-125 hover:text-secondary-green animate-pulse"
+						>
+							→
+						</div>
+						<div
+							class="bg-gradient-to-br from-white to-light-green p-6 rounded-2xl border-2 border-accent-green flex-1 w-full transition-all duration-300 hover:shadow-2xl hover:shadow-accent-green/30 hover:-translate-y-2 pulse-glow"
+						>
+							<div class="mb-4">
+								<div class="font-semibold text-primary-green">With Sceach</div>
+								<div class="text-sm text-text-light">AI-Powered</div>
+							</div>
+							<div class="space-y-2">
+								<div class="bg-bg-light py-2 px-4 rounded-lg text-sm">
+									🛰️ Satellite Scan
+								</div>
+								<div class="bg-bg-light py-2 px-4 rounded-lg text-sm">
+									🤖 AI Analysis
+								</div>
+								<div class="bg-bg-light py-2 px-4 rounded-lg text-sm">
+									📋 Instant Report
+								</div>
+								<div
+									class="text-center font-semibold text-secondary-green mt-4"
+								>
+									2-3 minutes
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Advanced Features Section -->
+		<section class="py-16 bg-gradient-to-br from-bg-light to-white">
+			<div class="container max-w-4xl mx-auto px-8 text-center">
+				<h2 class="text-2xl md:text-3xl font-bold mb-6 text-primary-green">
+					🤖 Continuous Monitoring
+				</h2>
+				<p class="text-lg text-text-gray mb-8">
+					Our AI system works 24/7, automatically scanning and detecting
+					violations across Ireland's hedgerows
+				</p>
+				<div class="max-w-2xl mx-auto">
+					<div
+						class="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-accent-green"
+					>
+						<video
+							class="w-full h-auto"
+							autoplay
+							muted
+							loop
+							playsinline
+							poster="public/background.png"
+						>
+							<source src="public/autoscan.mp4" type="video/mp4" />
+							Your browser does not support the video tag.
+						</video>
+						<div
+							class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full"
+						>
+							<p class="text-xs font-semibold text-primary-green">
+								🔄 Auto-Scan
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Impact Section -->
+		<section class="py-24 bg-white">
+			<div class="container max-w-6xl mx-auto px-8">
+				<div class="text-center">
+					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary-green">
+						Making a Real Impact
+					</h2>
+					<p class="text-lg md:text-xl text-text-gray mb-12">
+						Built by Aditya, Tomás, and Rosheen at Patch in just 6 weeks
+					</p>
+					<div class="flex justify-center gap-4 flex-wrap mb-12">
+						<div
+							class="bg-gradient-to-r from-bg-light to-white text-primary-green py-2 px-4 rounded-full font-medium border-2 border-border-color transition-all duration-300 hover:scale-110 hover:shadow-lg hover:border-accent-green hover:from-accent-green hover:to-secondary-green hover:text-white"
+						>
+							Next.js
+						</div>
+						<div
+							class="bg-gradient-to-r from-bg-light to-white text-primary-green py-2 px-4 rounded-full font-medium border-2 border-border-color transition-all duration-300 hover:scale-110 hover:shadow-lg hover:border-accent-green hover:from-accent-green hover:to-secondary-green hover:text-white"
+						>
+							Python
+						</div>
+						<div
+							class="bg-gradient-to-r from-bg-light to-white text-primary-green py-2 px-4 rounded-full font-medium border-2 border-border-color transition-all duration-300 hover:scale-110 hover:shadow-lg hover:border-accent-green hover:from-accent-green hover:to-secondary-green hover:text-white"
+						>
+							Computer Vision
+						</div>
+						<div
+							class="bg-gradient-to-r from-bg-light to-white text-primary-green py-2 px-4 rounded-full font-medium border-2 border-border-color transition-all duration-300 hover:scale-110 hover:shadow-lg hover:border-accent-green hover:from-accent-green hover:to-secondary-green hover:text-white"
+						>
+							Railway
+						</div>
+						<div
+							class="bg-gradient-to-r from-bg-light to-white text-primary-green py-2 px-4 rounded-full font-medium border-2 border-border-color transition-all duration-300 hover:scale-110 hover:shadow-lg hover:border-accent-green hover:from-accent-green hover:to-secondary-green hover:text-white"
+						>
+							Oracle Cloud
+						</div>
+					</div>
+					<div class="mt-8">
+						<div
+							class="bg-light-green text-dark-green py-4 px-8 rounded-lg font-semibold inline-block border-2 border-accent-green"
+						>
+							✅ Approved by National Parks and Wildlife Services Ireland (NPWS)
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- CTA Section -->
+		<section
+			class="py-24 bg-gradient-to-br from-primary-green to-secondary-green text-white"
+		>
+			<div class="container max-w-6xl mx-auto px-8">
+				<div class="text-center">
+					<h2 class="text-3xl md:text-4xl font-bold mb-4">
+						Help Us Protect Ireland's Biodiversity
+					</h2>
+					<p class="text-lg md:text-xl mb-12 opacity-90">
+						One hedgerow at a time
+					</p>
+					<a
+						href="https://app.sceach.eu"
+						class="bg-white text-primary-green py-5 px-10 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-bg-light hover:-translate-y-2 hover:scale-110 hover:shadow-2xl hover:shadow-white/30 inline-block group relative overflow-hidden"
+						target="_blank"
+						rel="noopener"
+					>
+						Go to App →
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<script>
+			// Create hedge clipping particles function (globally accessible)
+			function createParticles(x, y) {
+				const particleCount = Math.random() * 6 + 4; // 4-10 particles
+				x -= 20;
+				y -= 20;
+
+				for (let i = 0; i < particleCount; i++) {
+					const particle = document.createElement("div");
+
+					// Random particle types
+					const particleTypes = [
+						"particle",
+						"particle dot",
+						"particle dash",
+						"particle small-leaf",
+					];
+					const randomType =
+						particleTypes[Math.floor(Math.random() * particleTypes.length)];
+					particle.className = randomType;
+
+					// Random position around click point (smaller spread)
+					const offsetX = (Math.random() - 0.5) * 15;
+					const offsetY = (Math.random() - 0.5) * 15;
+
+					particle.style.left = x + offsetX + "px";
+					particle.style.top = y + offsetY + "px";
+
+					// Random movement variables for realistic falling
+					const randomXStart = (Math.random() - 0.5) * 30; // Initial sideways movement
+					const randomXEnd = randomXStart + (Math.random() - 0.5) * 20; // Final position
+					const randomRotateStart = Math.random() * 90; // Initial rotation
+					const randomRotateEnd = randomRotateStart + Math.random() * 270; // Final rotation
+
+					// Set CSS custom properties for animation
+					particle.style.setProperty("--random-x", randomXStart + "px");
+					particle.style.setProperty("--random-x-end", randomXEnd + "px");
+					particle.style.setProperty(
+						"--random-rotate",
+						randomRotateStart + "deg"
+					);
+					particle.style.setProperty(
+						"--random-rotate-end",
+						randomRotateEnd + "deg"
+					);
+
+					// Apply the animation
+					particle.style.animation =
+						"hedgeClippingFall 500ms ease-out forwards";
+
+					document.body.appendChild(particle);
+
+					// Remove particle after 500ms
+					setTimeout(() => {
+						if (particle.parentNode) {
+							particle.parentNode.removeChild(particle);
+						}
+					}, 500);
+				}
+			}
+
+			// Advanced Custom Cursor System
+			class AdvancedCursor {
+				constructor() {
+					this.cursor = null;
+					this.isDesktop = false;
+					this.isGrabbing = false;
+					this.lastPosition = { x: 0, y: 0 };
+					this.STORAGE_KEY = "cursor-position";
+					this.init();
+				}
+
+				init() {
+					// Device detection - only activate on desktop with fine pointer
+					this.isDesktop = window.matchMedia("(pointer: fine)").matches;
+
+					if (!this.isDesktop) {
+						console.log("Touch device detected, cursor disabled");
+						return;
+					}
+
+					this.createCursor();
+					this.loadSavedPosition();
+					this.attachEventListeners();
+					console.log("Advanced cursor system initialized");
+				}
+
+				createCursor() {
+					this.cursor = document.createElement("div");
+					this.cursor.className = "custom-cursor default";
+					document.body.appendChild(this.cursor);
+					console.log("Custom cursor element created:", this.cursor);
+				}
+
+				loadSavedPosition() {
+					try {
+						const saved = localStorage.getItem(this.STORAGE_KEY);
+						if (saved) {
+							this.lastPosition = JSON.parse(saved);
+							this.updatePosition(this.lastPosition.x, this.lastPosition.y);
+						}
+					} catch (e) {
+						console.warn("Could not load saved cursor position");
+					}
+				}
+
+				savePosition(x, y) {
+					try {
+						localStorage.setItem(this.STORAGE_KEY, JSON.stringify({ x, y }));
+					} catch (e) {
+						// Ignore localStorage errors
+					}
+				}
+
+				updatePosition(x, y) {
+					if (!this.cursor) return;
+
+					this.cursor.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(-30deg)`;
+					this.lastPosition = { x, y };
+					this.savePosition(x, y);
+				}
+
+				detectClickableElement(target) {
+					const clickableSelectors = [
+						"a",
+						"button",
+						"input",
+						"select",
+						"textarea",
+						'[role="button"]',
+						"[onclick]",
+						".btn-primary",
+						".btn-secondary",
+					];
+
+					return clickableSelectors.some(
+						(selector) =>
+							target.matches?.(selector) || target.closest?.(selector)
+					);
+				}
+
+				setCursorState(state) {
+					if (!this.cursor) return;
+
+					this.cursor.className = `custom-cursor ${state} visible`;
+				}
+
+				attachEventListeners() {
+					// Mouse movement tracking
+					document.addEventListener("mousemove", (e) => {
+						this.updatePosition(e.clientX, e.clientY);
+
+						// Detect clickable elements
+						const target = e.target;
+						if (this.detectClickableElement(target) && !this.isGrabbing) {
+							this.setCursorState("pointer");
+						} else if (!this.isGrabbing) {
+							this.setCursorState("default");
+						}
+					});
+
+					// Mouse down - grabbing state
+					document.addEventListener("mousedown", (e) => {
+						this.isGrabbing = true;
+						this.setCursorState("grabbing");
+						createParticles(e.clientX, e.clientY);
+					});
+
+					// Mouse up - release grabbing
+					document.addEventListener("mouseup", () => {
+						this.isGrabbing = false;
+						// Check if still over clickable element
+						const elementUnderCursor = document.elementFromPoint(
+							this.lastPosition.x,
+							this.lastPosition.y
+						);
+						if (
+							elementUnderCursor &&
+							this.detectClickableElement(elementUnderCursor)
+						) {
+							this.setCursorState("pointer");
+						} else {
+							this.setCursorState("default");
+						}
+					});
+
+					// Window focus/blur management
+					window.addEventListener("focus", () => {
+						if (this.cursor) {
+							this.cursor.classList.add("visible");
+						}
+					});
+
+					window.addEventListener("blur", () => {
+						if (this.cursor) {
+							this.cursor.classList.remove("visible");
+						}
+					});
+
+					// Mouse enter/leave window
+					document.addEventListener("mouseenter", () => {
+						if (this.cursor) {
+							this.cursor.classList.add("visible");
+						}
+					});
+
+					document.addEventListener("mouseleave", () => {
+						if (this.cursor) {
+							this.cursor.classList.remove("visible");
+						}
+					});
+
+					// Initial visibility
+					setTimeout(() => {
+						if (this.cursor) {
+							this.cursor.classList.add("visible");
+						}
+					}, 100);
+				}
+			}
+
+			// Initialize cursor system on DOM ready
+			document.addEventListener("DOMContentLoaded", function () {
+				console.log("Initializing Advanced Cursor System...");
+
+				// Check if images exist
+				const testImg = new Image();
+				testImg.onload = function () {
+					console.log("Cursor images loaded successfully");
+				};
+				testImg.onerror = function () {
+					console.error(
+						"Failed to load cursor images - check /public/open.png exists"
+					);
+				};
+				testImg.src = "public/open.png";
+
+				new AdvancedCursor();
+			});
+		</script>
+	</body>
+</html>
