@@ -49,7 +49,7 @@
 			html {
 				scroll-behavior: smooth;
 			}
-			
+
 			body {
 				cursor: none;
 			}
@@ -139,17 +139,17 @@
 				z-index: 0;
 			}
 
-            .cta-bg::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: url("public/background.png") center/cover no-repeat;
-                opacity: 0.1;
-                z-index: 0;
-            }
+			.cta-bg::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: url("public/background.png") center/cover no-repeat;
+				opacity: 0.1;
+				z-index: 0;
+			}
 
 			/* Hedge Clipping Particles */
 			.particle {
@@ -288,7 +288,11 @@
 			}
 
 			.green-circle {
-				background: radial-gradient(circle, rgba(124, 179, 66, 0.25), rgba(74, 124, 89, 0.12));
+				background: radial-gradient(
+					circle,
+					rgba(124, 179, 66, 0.25),
+					rgba(74, 124, 89, 0.12)
+				);
 				border-radius: 50%;
 				animation: pulse-soft 6s ease-in-out infinite;
 			}
@@ -321,11 +325,15 @@
 
 			.green-dots {
 				background: radial-gradient(
-					circle at 20% 20%, rgba(124, 179, 66, 0.08) 2px, transparent 2px
-				),
-				radial-gradient(
-					circle at 80% 80%, rgba(74, 124, 89, 0.06) 1.5px, transparent 1.5px
-				);
+						circle at 20% 20%,
+						rgba(124, 179, 66, 0.08) 2px,
+						transparent 2px
+					),
+					radial-gradient(
+						circle at 80% 80%,
+						rgba(74, 124, 89, 0.06) 1.5px,
+						transparent 1.5px
+					);
 				background-size: 20px 20px, 15px 15px;
 				animation: float-slow 9s ease-in-out infinite;
 			}
@@ -343,37 +351,67 @@
 			}
 
 			@keyframes float-slow {
-				0%, 100% { transform: translateY(0px) rotate(0deg); }
-				33% { transform: translateY(-15px) rotate(2deg); }
-				66% { transform: translateY(-8px) rotate(-1deg); }
+				0%,
+				100% {
+					transform: translateY(0px) rotate(0deg);
+				}
+				33% {
+					transform: translateY(-15px) rotate(2deg);
+				}
+				66% {
+					transform: translateY(-8px) rotate(-1deg);
+				}
 			}
 
 			@keyframes pulse-soft {
-				0%, 100% { transform: scale(1); opacity: 0.08; }
-				50% { transform: scale(1.1); opacity: 0.15; }
+				0%,
+				100% {
+					transform: scale(1);
+					opacity: 0.08;
+				}
+				50% {
+					transform: scale(1.1);
+					opacity: 0.15;
+				}
 			}
 
 			@keyframes rotate-slow {
-				0% { transform: rotate(0deg); }
-				100% { transform: rotate(360deg); }
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
 			}
 
 			@keyframes sway {
-				0%, 100% { transform: rotate(0deg) scale(1); }
-				25% { transform: rotate(3deg) scale(1.05); }
-				75% { transform: rotate(-3deg) scale(0.95); }
+				0%,
+				100% {
+					transform: rotate(0deg) scale(1);
+				}
+				25% {
+					transform: rotate(3deg) scale(1.05);
+				}
+				75% {
+					transform: rotate(-3deg) scale(0.95);
+				}
 			}
 
 			@keyframes slide {
-				0% { background-position: 0 0; }
-				100% { background-position: 32px 32px; }
+				0% {
+					background-position: 0 0;
+				}
+				100% {
+					background-position: 32px 32px;
+				}
 			}
 
 			/* Section-specific decorations */
 			.section-decorated {
 				position: relative;
 				overflow: hidden;
-			}		</style>
+			}
+		</style>
 	</head>
 	<body class="font-inter leading-relaxed text-text-dark bg-bg-light">
 		<!-- Hero Section -->
@@ -390,7 +428,7 @@
 						</span>
 					</div>
 					<h1
-						class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight "
+						class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
 					>
 						Protecting Ireland's Hedgerows
 						<span class="gradient-text block">with AI</span>
@@ -407,7 +445,6 @@
 						<a
 							href="https://sceach.eu"
 							class="bg-gradient-to-r from-primary-green to-secondary-green text-white py-4 px-8 rounded-lg font-semibold transition-all duration-300 border-2 border-primary-green hover:from-dark-green hover:to-primary-green hover:shadow-2xl hover:shadow-primary-green/30 hover:-translate-y-2 hover:scale-105 w-full sm:w-auto max-w-xs relative overflow-hidden group"
-							
 						>
 							Go to App →
 						</a>
@@ -425,13 +462,70 @@
 		<!-- Problem Section -->
 		<section class="py-24 bg-white section-decorated" id="about">
 			<!-- Background Decorations -->
-			<div class="bg-decoration green-block" style="width: 120px; height: 80px; top: 10%; left: 5%; animation-delay: 0s;"></div>
-			<div class="bg-decoration green-circle" style="width: 180px; height: 180px; top: 15%; right: 8%; animation-delay: 1s;"></div>
-			<div class="bg-decoration leaf-shape" style="width: 60px; height: 60px; top: 70%; left: 12%; animation-delay: 2s;"></div>
-			<div class="bg-decoration green-triangle" style="top: 25%; right: 15%; animation-delay: 3s;"></div>
-			<div class="bg-decoration green-stripes" style="width: 200px; height: 100px; top: 50%; right: 5%; animation-delay: 1.5s;"></div>
-			<div class="bg-decoration green-dots" style="width: 150px; height: 150px; top: 5%; left: 25%; animation-delay: 4s;"></div>
-			<div class="bg-decoration green-zigzag" style="width: 120px; height: 60px; top: 80%; left: 20%; animation-delay: 2.5s;"></div>
+			<div
+				class="bg-decoration green-block"
+				style="
+					width: 120px;
+					height: 80px;
+					top: 10%;
+					left: 5%;
+					animation-delay: 0s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-circle"
+				style="
+					width: 180px;
+					height: 180px;
+					top: 15%;
+					right: 8%;
+					animation-delay: 1s;
+				"
+			></div>
+			<div
+				class="bg-decoration leaf-shape"
+				style="
+					width: 60px;
+					height: 60px;
+					top: 70%;
+					left: 12%;
+					animation-delay: 2s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-triangle"
+				style="top: 25%; right: 15%; animation-delay: 3s"
+			></div>
+			<div
+				class="bg-decoration green-stripes"
+				style="
+					width: 200px;
+					height: 100px;
+					top: 50%;
+					right: 5%;
+					animation-delay: 1.5s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-dots"
+				style="
+					width: 150px;
+					height: 150px;
+					top: 5%;
+					left: 25%;
+					animation-delay: 4s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-zigzag"
+				style="
+					width: 120px;
+					height: 60px;
+					top: 80%;
+					left: 20%;
+					animation-delay: 2.5s;
+				"
+			></div>
 			<div class="container max-w-6xl mx-auto px-8">
 				<div class="text-center mb-16">
 					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary-green">
@@ -486,14 +580,80 @@
 		<!-- Solution Section -->
 		<section class="py-24 bg-bg-light section-decorated">
 			<!-- Background Decorations -->
-			<div class="bg-decoration green-circle" style="width: 200px; height: 200px; top: 5%; left: 3%; animation-delay: 0.5s;"></div>
-			<div class="bg-decoration green-block" style="width: 90px; height: 140px; top: 60%; right: 5%; animation-delay: 1.5s;"></div>
-			<div class="bg-decoration leaf-shape" style="width: 80px; height: 80px; top: 35%; right: 20%; animation-delay: 2.5s;"></div>
-			<div class="bg-decoration green-triangle" style="top: 75%; left: 8%; animation-delay: 3.5s;"></div>
-			<div class="bg-decoration green-stripes" style="width: 180px; height: 120px; top: 15%; right: 10%; animation-delay: 1s;"></div>
-			<div class="bg-decoration green-dots" style="width: 160px; height: 100px; top: 50%; left: 15%; animation-delay: 4s;"></div>
-			<div class="bg-decoration green-zigzag" style="width: 140px; height: 80px; top: 80%; right: 25%; animation-delay: 2s;"></div>
-			<div class="bg-decoration green-stripes" style="width: 100px; height: 150px; top: 25%; left: 85%; animation-delay: 5s;"></div>
+			<div
+				class="bg-decoration green-circle"
+				style="
+					width: 200px;
+					height: 200px;
+					top: 5%;
+					left: 3%;
+					animation-delay: 0.5s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-block"
+				style="
+					width: 90px;
+					height: 140px;
+					top: 60%;
+					right: 5%;
+					animation-delay: 1.5s;
+				"
+			></div>
+			<div
+				class="bg-decoration leaf-shape"
+				style="
+					width: 80px;
+					height: 80px;
+					top: 35%;
+					right: 20%;
+					animation-delay: 2.5s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-triangle"
+				style="top: 75%; left: 8%; animation-delay: 3.5s"
+			></div>
+			<div
+				class="bg-decoration green-stripes"
+				style="
+					width: 180px;
+					height: 120px;
+					top: 15%;
+					right: 10%;
+					animation-delay: 1s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-dots"
+				style="
+					width: 160px;
+					height: 100px;
+					top: 50%;
+					left: 15%;
+					animation-delay: 4s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-zigzag"
+				style="
+					width: 140px;
+					height: 80px;
+					top: 80%;
+					right: 25%;
+					animation-delay: 2s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-stripes"
+				style="
+					width: 100px;
+					height: 150px;
+					top: 25%;
+					left: 85%;
+					animation-delay: 5s;
+				"
+			></div>
 			<div class="container max-w-6xl mx-auto px-8">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 					<div>
@@ -652,14 +812,70 @@
 		</section>
 
 		<!-- Advanced Features Section -->
-		<section class="py-16 bg-gradient-to-br from-bg-light to-white section-decorated">
+		<section
+			class="py-16 bg-gradient-to-br from-bg-light to-white section-decorated"
+		>
 			<!-- Background Decorations -->
-			<div class="bg-decoration green-circle" style="width: 150px; height: 150px; top: 10%; right: 10%; animation-delay: 1s;"></div>
-			<div class="bg-decoration leaf-shape" style="width: 100px; height: 100px; top: 70%; left: 5%; animation-delay: 2s;"></div>
-			<div class="bg-decoration green-block" style="width: 110px; height: 60px; top: 30%; left: 15%; animation-delay: 3s;"></div>
-			<div class="bg-decoration green-stripes" style="width: 120px; height: 80px; top: 15%; left: 35%; animation-delay: 0.5s;"></div>
-			<div class="bg-decoration green-dots" style="width: 90px; height: 90px; top: 60%; right: 20%; animation-delay: 4s;"></div>
-			<div class="bg-decoration green-zigzag" style="width: 100px; height: 50px; top: 80%; right: 15%; animation-delay: 1.5s;"></div>
+			<div
+				class="bg-decoration green-circle"
+				style="
+					width: 150px;
+					height: 150px;
+					top: 10%;
+					right: 10%;
+					animation-delay: 1s;
+				"
+			></div>
+			<div
+				class="bg-decoration leaf-shape"
+				style="
+					width: 100px;
+					height: 100px;
+					top: 70%;
+					left: 5%;
+					animation-delay: 2s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-block"
+				style="
+					width: 110px;
+					height: 60px;
+					top: 30%;
+					left: 15%;
+					animation-delay: 3s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-stripes"
+				style="
+					width: 120px;
+					height: 80px;
+					top: 15%;
+					left: 35%;
+					animation-delay: 0.5s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-dots"
+				style="
+					width: 90px;
+					height: 90px;
+					top: 60%;
+					right: 20%;
+					animation-delay: 4s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-zigzag"
+				style="
+					width: 100px;
+					height: 50px;
+					top: 80%;
+					right: 15%;
+					animation-delay: 1.5s;
+				"
+			></div>
 			<div class="container max-w-4xl mx-auto px-8 text-center">
 				<h2 class="text-2xl md:text-3xl font-bold mb-6 text-primary-green">
 					🤖 Continuous Monitoring
@@ -698,22 +914,111 @@
 		<!-- Impact Section -->
 		<section class="py-24 bg-white section-decorated">
 			<!-- Background Decorations -->
-			<div class="bg-decoration green-block" style="width: 160px; height: 100px; top: 8%; left: 8%; animation-delay: 0.5s;"></div>
-			<div class="bg-decoration green-circle" style="width: 220px; height: 220px; top: 12%; right: 5%; animation-delay: 1.5s;"></div>
-			<div class="bg-decoration leaf-shape" style="width: 90px; height: 90px; top: 65%; right: 12%; animation-delay: 2.5s;"></div>
-			<div class="bg-decoration green-triangle" style="top: 45%; left: 5%; animation-delay: 3.5s;"></div>
-			<div class="bg-decoration green-stripes" style="width: 200px; height: 120px; top: 25%; left: 20%; animation-delay: 1s;"></div>
-			<div class="bg-decoration green-dots" style="width: 180px; height: 100px; top: 70%; left: 15%; animation-delay: 4s;"></div>
-			<div class="bg-decoration green-zigzag" style="width: 150px; height: 80px; top: 10%; right: 25%; animation-delay: 2s;"></div>
-			<div class="bg-decoration green-stripes" style="width: 120px; height: 140px; top: 50%; right: 8%; animation-delay: 5s;"></div>
-			<div class="bg-decoration green-dots" style="width: 100px; height: 100px; top: 80%; right: 30%; animation-delay: 3s;"></div>
+			<div
+				class="bg-decoration green-block"
+				style="
+					width: 160px;
+					height: 100px;
+					top: 8%;
+					left: 8%;
+					animation-delay: 0.5s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-circle"
+				style="
+					width: 220px;
+					height: 220px;
+					top: 12%;
+					right: 5%;
+					animation-delay: 1.5s;
+				"
+			></div>
+			<div
+				class="bg-decoration leaf-shape"
+				style="
+					width: 90px;
+					height: 90px;
+					top: 65%;
+					right: 12%;
+					animation-delay: 2.5s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-triangle"
+				style="top: 45%; left: 5%; animation-delay: 3.5s"
+			></div>
+			<div
+				class="bg-decoration green-stripes"
+				style="
+					width: 200px;
+					height: 120px;
+					top: 25%;
+					left: 20%;
+					animation-delay: 1s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-dots"
+				style="
+					width: 180px;
+					height: 100px;
+					top: 70%;
+					left: 15%;
+					animation-delay: 4s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-zigzag"
+				style="
+					width: 150px;
+					height: 80px;
+					top: 10%;
+					right: 25%;
+					animation-delay: 2s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-stripes"
+				style="
+					width: 120px;
+					height: 140px;
+					top: 50%;
+					right: 8%;
+					animation-delay: 5s;
+				"
+			></div>
+			<div
+				class="bg-decoration green-dots"
+				style="
+					width: 100px;
+					height: 100px;
+					top: 80%;
+					right: 30%;
+					animation-delay: 3s;
+				"
+			></div>
 			<div class="container max-w-6xl mx-auto px-8">
 				<div class="text-center">
 					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary-green">
 						Making a Real Impact
 					</h2>
 					<p class="text-lg md:text-xl text-text-gray mb-12">
-						Built by <a href="linkedin.adityajoshi.cc">Aditya</a>, <a href="https://www.linkedin.com/in/tom%C3%A1s-markey-083358249/"></a>Tomás</a>, and <a href="https://www.linkedin.com/in/rosheen-sharma-7aa63b26b/">Rosheen</a> at Patch in just 6 weeks
+						Built by
+						<a href="https://linkedin.adityajoshi.cc" class="underline"
+							>Aditya</a
+						>,
+						<a
+							href="https://www.linkedin.com/in/tom%C3%A1s-markey-083358249/"
+							class="underline"
+							>Tomás</a
+						>, and
+						<a
+							href="https://www.linkedin.com/in/rosheen-sharma-7aa63b26b/"
+							class="underline"
+							>Rosheen</a
+						>
+						at Patch in just 6 weeks
 					</p>
 					<div class="flex justify-center gap-4 flex-wrap mb-12">
 						<div
@@ -768,7 +1073,6 @@
 					<a
 						href="https://sceach.eu"
 						class="bg-white text-primary-green py-5 px-10 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-bg-light hover:-translate-y-2 hover:scale-110 hover:shadow-2xl hover:shadow-white/30 inline-block group relative overflow-hidden"
-						
 					>
 						Go to App →
 					</a>
@@ -1014,18 +1318,18 @@
 				testImg.src = "public/open.png";
 
 				new AdvancedCursor();
-				
+
 				// Enhanced smooth scrolling for anchor links
-				document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-					anchor.addEventListener('click', function (e) {
+				document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+					anchor.addEventListener("click", function (e) {
 						e.preventDefault();
-						const targetId = this.getAttribute('href');
+						const targetId = this.getAttribute("href");
 						const targetElement = document.querySelector(targetId);
-						
+
 						if (targetElement) {
 							targetElement.scrollIntoView({
-								behavior: 'smooth',
-								block: 'start'
+								behavior: "smooth",
+								block: "start",
 							});
 						}
 					});
